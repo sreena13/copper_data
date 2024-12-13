@@ -53,7 +53,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report, accuracy_score
 from sklearn.preprocessing import LabelEncoder
 
-data = df = pd.read_csv('D:\PYTHON_ML\Data Sets\Processed_Copper_Set.csv')
+data = df = pd.read_csv('Processed_Copper_Set.csv')
 
 # Clean the data (remove whitespace, handle missing values, etc.)
 df.columns = df.columns.str.strip()
@@ -102,7 +102,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # Load and preprocess the data
-data = pd.read_csv('D:\PYTHON_ML\Data Sets\Processed_Copper_Set.csv')
+data = pd.read_csv('Processed_Copper_Set.csv')
 data.columns = data.columns.str.strip()
 data = data[data['status'].isin(['Won', 'Draft', 'To be approved', 'Lost', 'Not lost for AM',
                                  'Wonderful', 'Revised', 'Offered', 'Offerable'])]
