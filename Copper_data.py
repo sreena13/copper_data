@@ -1,7 +1,7 @@
 # import pandas as pd
 # from sklearn.preprocessing import MinMaxScaler
 
-# data = df = pd.read_csv('Processed_Copper_Set.csv')
+# data = df = pd.read_csv('D:\PYTHON_ML\Data Sets\Copper_Set.xlsx - Result 1.csv')
 
 # # Parse the first sheet (assumes the dataset is in the first sheet)
 # # df = data.parse(data.sheet_names[0])
@@ -40,12 +40,12 @@
 
 # df.rename(columns={'delivery date':'delivery_date'}, inplace=True)
 
-# # Step 6: Save the Processed Data
+# Step 6: Save the Processed Data
 # output_file = "Processed_Copper_Set.csv"
 # df.to_csv(output_file, index=False)
 # print(f"Processed dataset saved to {output_file}")
 
-# print("execution done")
+print("execution done")
 
 import pandas as pd
 from sklearn.model_selection import train_test_split
@@ -53,7 +53,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report, accuracy_score
 from sklearn.preprocessing import LabelEncoder
 
-data = df = pd.read_csv('Processed_Copper_Set.csv')
+data = df = pd.read_csv('D:\PYTHON_ML\Data Sets\Processed_Copper_Set.csv')
 
 # Clean the data (remove whitespace, handle missing values, etc.)
 df.columns = df.columns.str.strip()
@@ -198,4 +198,3 @@ elif pages == "Dashboard":
     # Data Preview
     st.subheader("Data Overview")
     st.dataframe(data.head())
-
