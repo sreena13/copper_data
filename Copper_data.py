@@ -97,12 +97,12 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, classification_report
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 # Load and preprocess the data
-data = pd.read_csv('Processed_Copper_Set.csv')
-
-# Clean the data
+data = pd.read_csv('D:\PYTHON_ML\Data Sets\Processed_Copper_Set.csv')
 data.columns = data.columns.str.strip()
 data = data[data['status'].isin(['Won', 'Draft', 'To be approved', 'Lost', 'Not lost for AM',
                                  'Wonderful', 'Revised', 'Offered', 'Offerable'])]
@@ -127,30 +127,75 @@ rf_classifier.fit(X_train, y_train)
 linear_regressor = LinearRegression()
 linear_regressor.fit(X_train, y_train)
 
-# Streamlit user interface
-st.title("Copper Industry Lead Prediction")
+# Sidebar for navigation
+st.sidebar.title("Navigation")
+pages = st.sidebar.radio("Go to:", ["Predict Status", "Model Performance", "Dashboard"])
 
-st.write("Enter values for the following columns:")
+# Page 1: Predict Status
+if pages == "Predict Status":
+    st.title("Copper Industry Lead Prediction")
+    st.write("Enter values for the following columns:")
 
-# Input fields for each column
-inputs = {}
-for col in X.columns:
-    inputs[col] = st.number_input(f"Enter value for {col}", value=0.0)
+    inputs = {}
+    for col in X.columns:
+        inputs[col] = st.sidebar.number_input(f"Enter value for {col}", value=0.0)
 
-# Model selection
-model_choice = st.selectbox("Choose a model:", ["Random Forest Classifier", "Linear Regression"])
+    model_choice = st.sidebar.selectbox("Choose a model:", ["Random Forest Classifier", "Linear Regression"])
 
-# Make prediction based on inputs
-if st.button("Predict Status"):
-    input_data = pd.DataFrame([inputs])
-    
-    if model_choice == "Random Forest Classifier":
-        prediction = rf_classifier.predict(input_data)
-        status = label_encoder.inverse_transform(prediction)[0]
-        st.write(f"The predicted Status using Random Forest is: {status}")
-    
-    elif model_choice == "Linear Regression":
-        prediction = linear_regressor.predict(input_data)
-        predicted_class = int(round(prediction[0]))
-        status = label_encoder.inverse_transform([predicted_class])[0]
-        st.write(f"The predicted Status using Linear Regression is: {status}")
+    if st.sidebar.button("Predict Status"):
+        input_data = pd.DataFrame([inputs])
+        if model_choice == "Random Forest Classifier":
+            prediction = rf_classifier.predict(input_data)
+            status = label_encoder.inverse_transform(prediction)[0]
+            st.success(f"The predicted Status using Random Forest is: {status}")
+        elif model_choice == "Linear Regression":
+            prediction = linear_regressor.predict(input_data)
+            predicted_class = int(round(prediction[0]))
+            status = label_encoder.inverse_transform([predicted_class])[0]
+            st.success(f"The predicted Status using Linear Regression is: {status}")
+
+# Page 2: Model Performance
+elif pages == "Model Performance":
+    st.title("Model Performance Metrics")
+
+    # Random Forest Metrics
+    rf_y_pred = rf_classifier.predict(X_test)
+    rf_accuracy = accuracy_score(y_test, rf_y_pred)
+    st.subheader("Random Forest Classifier")
+    st.write(f"Accuracy: {rf_accuracy:.2f}")
+    st.text("Classification Report:")
+    st.text(classification_report(y_test, rf_y_pred, zero_division=0))
+
+    # Linear Regression Metrics
+    linear_y_pred = linear_regressor.predict(X_test)
+    linear_y_pred = [int(round(pred)) for pred in linear_y_pred]
+    linear_accuracy = accuracy_score(y_test, linear_y_pred)
+    st.subheader("Linear Regression")
+    st.write(f"Accuracy: {linear_accuracy:.2f}")
+
+# Page 3: Dashboard
+elif pages == "Dashboard":
+    st.title("Dashboard")
+
+    # Line Chart: Quantity over Thickness
+    st.subheader("Quantity vs Thickness")
+    fig, ax = plt.subplots()
+    sns.lineplot(x=data['thickness'], y=data['quantity_tons'], ax=ax)
+    st.pyplot(fig)
+
+    # Bar Graph: Item Type Distribution
+    st.subheader("Item Type Distribution")
+    fig, ax = plt.subplots()
+    data['item_type'].value_counts().plot(kind='bar', ax=ax, color='skyblue')
+    st.pyplot(fig)
+
+    # Scatter Plot: Thickness vs Width
+    st.subheader("Scatter Plot: Thickness vs Width")
+    fig, ax = plt.subplots()
+    sns.scatterplot(x=data['thickness'], y=data['width'], hue=data['status'], ax=ax)
+    st.pyplot(fig)
+
+    # Data Preview
+    st.subheader("Data Overview")
+    st.dataframe(data.head())
+
