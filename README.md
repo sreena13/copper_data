@@ -47,6 +47,7 @@ The performance of each model is evaluated using metrics like **accuracy** and t
 
 ## ⚙️ How to Use the App
 
+### URL TO ACCESS - https://copperdata.streamlit.app/
 ### 📝 Enter Data
 - Use the sidebar to enter feature values and select your model.
 - Click the **"Predict Status"** button to get your result.
