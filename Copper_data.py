@@ -53,7 +53,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report, accuracy_score
 from sklearn.preprocessing import LabelEncoder
 
-data = df = pd.read_csv('D:\PYTHON_ML\Data Sets\Processed_Copper_Set.csv')
+data = df = pd.read_csv('Processed_Copper_Set.csv')
 
 # Clean the data (remove whitespace, handle missing values, etc.)
 df.columns = df.columns.str.strip()
